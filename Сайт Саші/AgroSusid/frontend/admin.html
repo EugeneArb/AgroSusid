@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Адмінка — АгроСусід</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Адмін-панель</h1>
+
+    <form id="product-form">
+        <input type="text" placeholder="Назва" id="name" required>
+        <select id="category">
+            <option value="seed">Насіння</option>
+            <option value="fertilizer">Добрива</option>
+        </select>
+        <input type="number" placeholder="Ціна" id="price" required>
+        <textarea placeholder="Опис" id="description"></textarea>
+        <button type="submit">Додати товар</button>
+    </form>
+
+    <script>
+document.getElementById("product-form").addEventListener("submit", e => {
+    e.preventDefault();
+    alert("Пізніше підключимо до API 👌");
+});
+    </script>
+
+</body>
+</html>

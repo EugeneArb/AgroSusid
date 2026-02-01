@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Товар — АгроСусід</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header"><div class="top-bar"><div class="logo" onclick="location.href='index.html'">🌱 АгроСусід</div></div></header>
+    <main class="container">
+        <div id="product-view" class="product-page-flex"></div>
+    </main>
+    <script>
+        const p = JSON.parse(localStorage.getItem('selectedProduct'));
+        if (p) {
+            document.getElementById('product-view').innerHTML = `
+                    <div class="prod-left"><img src="${p.img}"></div>
+                    <div class="prod-right">
+                        <h1>${p.name}</h1>
+                        <div class="price-tag">${p.price} грн</div>
+                        <button class="add-btn" onclick="addToCartFromPage(${p.id})">Купити</button>
+                        <div class="tabs">
+                            <div class="tab-links">
+                                <button onclick="tab('d')">Опис</button>
+                                <button onclick="tab('c')">Характеристики</button>
+                            </div>
+                            <div id="d" class="tab-c show">${p.desc}</div>
+                            <div id="c" class="tab-c">Виробник: Україна</div>
+                        </div>
+                    </div>
+                `;
+        }
+        function tab(id) {
+            document.querySelectorAll('.tab-c').forEach(x => x.classList.remove('show'));
+            document.getElementById(id).classList.add('show');
+        }
+    </script>
+</body>
+</html>
