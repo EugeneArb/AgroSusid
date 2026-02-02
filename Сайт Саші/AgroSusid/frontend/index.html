@@ -5,25 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АгроСусід — Магазин</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
+    <div class="logo" onclick="filterProducts('all')">🌱 АгроСусід</div>
     <header class="main-header">
         <div class="top-bar">
-            <div class="logo" onclick="filterProducts('all')">🌱 АгроСусід</div>
             <nav class="main-nav">
-                <div class="dropdown">
-                    <a href="#" class="nav-link">Товари ▼</a>
-                    <div class="dropdown-menu">
-                        <a href="#" onclick="filterProducts('all')">Всі товари</a>
-                        <a href="#" onclick="filterProducts('herbicides')">Гербіциди</a>
-                        <a href="#" onclick="filterProducts('seeds')">Насіння</a>
-                        <a href="#" onclick="filterProducts('fertilizers')">Добрива</a>
-                    </div>
-                </div>
-                <a href="#" class="nav-link accent">Акції</a>
-                <a href="#" class="nav-link">Доставка</a>
-                <a href="#" class="nav-link">Контакти</a>
+                <button class="nav-link" onclick="filterProducts('all')">Всі товари</button>
+                <button class="nav-link" onclick="filterProducts('herbicides')">Гербіциди</button>
+                <button class="nav-link" onclick="filterProducts('seeds')">Насіння</button>
+                <button class="nav-link" onclick="filterProducts('fertilizers')">Добрива</button>
             </nav>
             <div class="cart-wrapper" onclick="toggleCart(true)">
                 <span>🛒 Кошик</span>
@@ -33,7 +25,7 @@
     </header>
 
     <main class="container">
-        <h1 id="category-title" class="category-header-styled">Всі товари</h1>
+        <h1 id="category-title" class="category-header">Наші товари</h1>
         <div id="products-grid" class="products-grid"></div>
     </main>
 
@@ -45,7 +37,7 @@
         <div id="cart-items-list" class="cart-content"></div>
         <div class="cart-footer">
             <div class="total-row">Разом: <span id="cart-total">0</span> грн</div>
-            <button class="checkout-btn" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
+            <button class="checkout-btn-main" onclick="openOrderForm()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
         </div>
     </div>
 
@@ -53,40 +45,41 @@
         <div class="modal-content">
             <h2>Оформлення замовлення</h2>
             <form id="final-order-form">
-                <input type="text" placeholder="Прізвище та Ім'я" required class="form-input">
-                <input type="tel" placeholder="Телефон" required class="form-input">
+                <input type="text" id="cust-name" placeholder="Прізвище та Ім'я" required class="form-input">
+                <input type="tel" id="cust-phone" placeholder="Телефон" required class="form-input">
 
-                <label>Доставка:</label>
-                <select id="delivery-type" onchange="toggleDeliveryFields()" class="form-input">
-                    <option value="Warehouse">Відділення (НП)</option>
-                    <option value="Postomat">Поштомат (НП)</option>
+                <label class="form-label">Доставка:</label>
+                <select id="delivery-type" class="form-input" onchange="resetNP()">
+                    <option value="Warehouse">Відділення (Нова Пошта)</option>
+                    <option value="Postomat">Поштомат (Нова Пошта)</option>
                     <option value="Doors">Адресна доставка</option>
                 </select>
 
-                <div class="search-box-container">
+                <div class="np-search-box">
                     <input type="text" id="city-input" placeholder="Введіть місто..." oninput="searchCity()" class="form-input" autocomplete="off">
                     <div id="city-results" class="search-results"></div>
                     <input type="hidden" id="selected-city-ref">
                 </div>
 
-                <div id="warehouse-box">
-                    <select id="warehouse-select" class="form-input" disabled>
-                        <option>Оберіть відділення...</option>
-                    </select>
-                </div>
-
-                <div id="address-box" style="display:none;">
-                    <input type="text" placeholder="Вулиця, будинок, квартира" class="form-input">
-                </div>
+                <select id="warehouse-select" class="form-input" disabled>
+                    <option>Оберіть відділення...</option>
+                </select>
 
                 <div class="payment-methods">
                     <label class="radio-card"><input type="radio" name="payment" value="cod" checked> Післяплата</label>
                     <label class="radio-card"><input type="radio" name="payment" value="bank"> На рахунок</label>
                 </div>
 
-                <div class="final-sum">До сплати: <span id="modal-total-sum">0</span> грн</div>
-                <button type="submit" class="confirm-btn">ПІДТВЕРДИТИ ЗАМОВЛЕННЯ</button>
-                <button type="button" onclick="closeOrderForm()" class="cancel-link">Скасувати</button>
+                <div class="final-sum-display">
+                    До сплати: <span id="modal-total-sum">0</span> грн
+                </div>
+
+                <button type="submit" class="confirm-order-btn">ПІДТВЕРДИТИ ЗАМОВЛЕННЯ</button>
+
+                <div class="order-form-footer">
+                    <button type="button" class="btn-back" onclick="closeOrderForm(false)">Повернутися до замовлення</button>
+                    <button type="button" class="btn-clear" onclick="closeOrderForm(true)">Скасувати замовлення</button>
+                </div>
             </form>
         </div>
     </div>

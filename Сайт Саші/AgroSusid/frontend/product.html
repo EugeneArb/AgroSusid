@@ -2,37 +2,80 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Товар — АгроСусід</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="main-header"><div class="top-bar"><div class="logo" onclick="location.href='index.html'">🌱 АгроСусід</div></div></header>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="logo" onclick="location.href='index.html'">🌱 АгроСусід</div>
+            <div class="cart-wrapper" onclick="toggleCart(true)">
+                <span>🛒 Кошик</span>
+                <span id="cart-count" class="badge">0</span>
+            </div>
+        </div>
+    </header>
+
     <main class="container">
-        <div id="product-view" class="product-page-flex"></div>
+        <div id="product-details-view" class="product-page-flex">
+        </div>
     </main>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <h2>Кошик</h2>
+            <button onclick="toggleCart(false)" class="close-btn">✕</button>
+        </div>
+        <div id="cart-items-list" class="cart-content"></div>
+        <div class="cart-footer">
+            <div class="total-row">Разом: <span id="cart-total">0</span> грн</div>
+            <button class="checkout-btn-main" onclick="location.href='index.html?openOrder=true'">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
     <script>
-        const p = JSON.parse(localStorage.getItem('selectedProduct'));
-        if (p) {
-            document.getElementById('product-view').innerHTML = `
-                    <div class="prod-left"><img src="${p.img}"></div>
+        // Специфічна логіка для сторінки товару
+        window.onload = () => {
+            const product = JSON.parse(localStorage.getItem('selectedProduct'));
+            const view = document.getElementById('product-details-view');
+
+            if (!product) {
+                view.innerHTML = "<h2>Товар не знайдено</h2><a href='index.html'>Повернутися в магазин</a>";
+                return;
+            }
+
+            view.innerHTML = `
+                    <div class="prod-left">
+                        <img src="${product.img}" alt="${product.name}">
+                    </div>
                     <div class="prod-right">
-                        <h1>${p.name}</h1>
-                        <div class="price-tag">${p.price} грн</div>
-                        <button class="add-btn" onclick="addToCartFromPage(${p.id})">Купити</button>
-                        <div class="tabs">
+                        <h1 class="p-title-page">${product.name}</h1>
+                        <div class="stock-status">● В наявності</div>
+                        <div class="price-tag-page">${product.price} грн.</div>
+
+                        <button class="add-btn-large" onclick="addToCartFromPage(${product.id})">🛒 Додати в кошик</button>
+
+                        <div class="product-tabs">
                             <div class="tab-links">
-                                <button onclick="tab('d')">Опис</button>
-                                <button onclick="tab('c')">Характеристики</button>
+                                <button class="tab-btn active" onclick="switchTab(event, 'desc')">Опис</button>
+                                <button class="tab-btn" onclick="switchTab(event, 'info')">Інфо</button>
                             </div>
-                            <div id="d" class="tab-c show">${p.desc}</div>
-                            <div id="c" class="tab-c">Виробник: Україна</div>
+                            <div id="desc" class="tab-content show">${product.desc}</div>
+                            <div id="info" class="tab-content">Категорія: ${product.category}<br>Артикул: 00${product.id}</div>
                         </div>
                     </div>
                 `;
-        }
-        function tab(id) {
-            document.querySelectorAll('.tab-c').forEach(x => x.classList.remove('show'));
+            updateCartUI(); // Оновити кошик при завантаженні
+        };
+
+        function switchTab(e, id) {
+            document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('show'));
+            document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
             document.getElementById(id).classList.add('show');
+            e.currentTarget.classList.add('active');
         }
     </script>
 </body>
